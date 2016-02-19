@@ -18,6 +18,7 @@ package org.jivesoftware.smackx.ping;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
@@ -25,7 +26,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
 
 import org.jivesoftware.smack.Connection;
 import org.jivesoftware.smack.ConnectionCreationListener;
@@ -152,13 +152,13 @@ public class PingManager {
     }
 
     public static PingManager getInstanceFor(Connection connection) {
-        PingManager pingManager = instances.get(connection);
-        
-        if (pingManager == null) {
-            pingManager = new PingManager(connection);
-        }
-
-        return pingManager;
+        Iterator<Connection> iterator = instances.keySet().iterator();
+        while (iterator.hasNext()) {
+			Connection connection2 = (Connection) iterator.next();
+			
+			return instances.get(connection2);
+		}
+        return null;
     }
 
     public void setPingIntervall(int pingIntervall) {
